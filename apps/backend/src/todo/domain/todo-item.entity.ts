@@ -13,7 +13,7 @@ type TodoItemConstructorProps = TodoItemCreateProps & BaseEntityConstructorProps
   completedAt?: Date;
 };
 
-type TodoItemProps = BaseEntityProps & {
+export type TodoItemProps = BaseEntityProps & {
   content: string;
   todoId: string;
   isCompleted: boolean;

@@ -99,6 +99,11 @@ describe('Todo Unit Tests', () => {
     expect(todo.hasAccess('user10@email.com')).toBe(true);
   });
 
+  it('should throw an error when creating a TodoItem entity with an invalid ownerId', () => {
+    expect(() => Todo.create({ title: 'Title', ownerId: '' }))
+      .toThrow(new TodoInvalidError('OwnerId is required'));
+  });
+
   it('should throw an error when creating a TodoItem entity with an invalid title', () => {
     expect(() => Todo.create({ title: '', ownerId: 'a35d400e-5851-4b23-ada7-6799cc9701ff' }))
       .toThrow(new TodoInvalidError('Title is required'));

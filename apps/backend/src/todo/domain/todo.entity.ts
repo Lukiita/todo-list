@@ -1,6 +1,6 @@
 import { BaseEntity, BaseEntityConstructorProps, BaseEntityProps, Email, EntityId } from '../../shared';
 import { TodoInvalidError } from './errors';
-import { TodoItem } from './todo-item.entity';
+import { TodoItem, TodoItemProps } from './todo-item.entity';
 
 type TodoConstructorProps = BaseEntityConstructorProps & TodoCreateProps & {
   items?: TodoItem[];
@@ -15,11 +15,11 @@ type TodoRestoreProps = TodoConstructorProps & {
   shareWith?: string[];
 };
 
-type TodoProps = BaseEntityProps & {
+export type TodoProps = BaseEntityProps & {
   title: string;
   ownerId: string;
   sharedWith: string[];
-  items: TodoItem[];
+  items: TodoItemProps[];
 };
 
 export class Todo extends BaseEntity {
@@ -31,6 +31,9 @@ export class Todo extends BaseEntity {
   private constructor(props: TodoConstructorProps) {
     super(props);
     this._title = props.title;
+    if (!props.ownerId) {
+      throw new TodoInvalidError('OwnerId is required');
+    }
     this._ownerId = new EntityId(props.ownerId);
     this._items = props.items || [];
     this.validate();
@@ -125,7 +128,7 @@ export class Todo extends BaseEntity {
       title: this._title,
       ownerId: this._ownerId.value,
       sharedWith: this.sharedWith,
-      items: this._items,
+      items: this.items.map((item) => item.toJSON()),
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     };
