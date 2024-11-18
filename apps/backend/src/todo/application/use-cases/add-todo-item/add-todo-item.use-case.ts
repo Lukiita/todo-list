@@ -3,7 +3,7 @@ import { TodoNotFoundError, TodoRepository } from '../../../domain';
 export class AddTodoItemUseCase {
   constructor(private todoRepository: TodoRepository) { }
 
-  public async execute(input: CreateTaskInput): Promise<CreateTaskOutput> {
+  public async execute(input: AddTodoItemInput): Promise<AddTodoItemOutput> {
     const todo = await this.todoRepository.getById(input.todoId);
     if (!todo) {
       throw new TodoNotFoundError(input.todoId);
@@ -14,10 +14,10 @@ export class AddTodoItemUseCase {
   }
 }
 
-type CreateTaskInput = {
+type AddTodoItemInput = {
   todoId: string;
   content: string;
   userId: string;
 };
 
-type CreateTaskOutput = void;
+type AddTodoItemOutput = void;

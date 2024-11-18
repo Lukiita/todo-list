@@ -3,7 +3,7 @@ import { Todo, TodoRepository } from '../../../domain';
 export class CreateTodoUseCase {
   constructor(private todoRepository: TodoRepository) { }
 
-  public async execute(input: CreateTaskInput): Promise<CreateTaskOutput> {
+  public async execute(input: CreateTodoInput): Promise<CreateTodoOutput> {
     const todoList = Todo.create({
       title: input.title,
       ownerId: input.userId,
@@ -14,11 +14,11 @@ export class CreateTodoUseCase {
   }
 }
 
-type CreateTaskInput = {
+type CreateTodoInput = {
   title: string;
   userId: string;
 };
 
-type CreateTaskOutput = {
+type CreateTodoOutput = {
   todoId: string;
 };
