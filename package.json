@@ -16,7 +16,8 @@
     "build:backend": "yarn workspace backend build",
     "build": "yarn run build:frontend && yarn run build:backend",
     "test": "yarn workspace backend test",
-    "prepare": "husky"
+    "prepare": "husky",
+     "commit": "git-cz"
   },
   "author": {
     "name": "Lucas Fernandes Lima",
@@ -25,8 +26,15 @@
   "devDependencies": {
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
+    "commitizen": "^4.3.1",
+    "cz-conventional-changelog": "^3.3.0",
     "husky": "^9.1.6",
     "ts-node": "^10.9.2",
     "typescript": "~5.5.2"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
