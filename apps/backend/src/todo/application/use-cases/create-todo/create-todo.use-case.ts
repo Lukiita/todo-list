@@ -4,13 +4,13 @@ export class CreateTodoUseCase {
   constructor(private todoRepository: TodoRepository) { }
 
   public async execute(input: CreateTodoInput): Promise<CreateTodoOutput> {
-    const todoList = Todo.create({
+    const todo = Todo.create({
       title: input.title,
       ownerId: input.userId,
     });
 
-    await this.todoRepository.create(todoList);
-    return { todoId: todoList.id };
+    await this.todoRepository.create(todo);
+    return { todoId: todo.id };
   }
 }
 
