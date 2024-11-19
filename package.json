@@ -5,8 +5,8 @@
   "packageManager": "yarn@4.5.1",
   "private": true,
   "workspaces": [
-    "apps/frontend",
-    "apps/backend"
+    "apps/backend",
+    "apps/frontend"
   ],
   "scripts": {
     "start:frontend": "yarn workspace frontend start",
