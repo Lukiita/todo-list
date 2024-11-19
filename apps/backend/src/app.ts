@@ -6,6 +6,7 @@ import { authenticateMiddleware } from './shared';
 import errorHandler from './shared/infra/middlewares/error-handler.middleware';
 import { router as todoRoutes } from './todo';
 import { AddTodoItemUseCase, ChangeOrderTodoItemUseCase, CreateTodoUseCase, GetTodoUseCase, ShareTodoUseCase, UpdateTodoItemUseCase } from './todo/application';
+import { TodoAccessService } from './todo/application/services';
 import { TodoFirestoreRepository } from './todo/infra/repositories/firestore/todo-firestore.repository';
 import { TodoController } from './todo/infra/web/todo.controller';
 import {
@@ -44,13 +45,14 @@ app.use("/users", (req, res, next) => {
   }
 }, userRoutes(userController));
 
+const todoAccessService = new TodoAccessService(userRepository);
 const todoRepository = new TodoFirestoreRepository();
-const addTodoItemUseCase = new AddTodoItemUseCase(todoRepository);
-const changeOrderTodoItemUseCase = new ChangeOrderTodoItemUseCase(todoRepository);
+const addTodoItemUseCase = new AddTodoItemUseCase(todoAccessService, todoRepository);
+const changeOrderTodoItemUseCase = new ChangeOrderTodoItemUseCase(todoAccessService, todoRepository);
 const createTodoUseCase = new CreateTodoUseCase(todoRepository);
-const getTodoUseCase = new GetTodoUseCase(todoRepository);
-const shareTodoUseCase = new ShareTodoUseCase(todoRepository);
-const updateTodoItemUseCase = new UpdateTodoItemUseCase(todoRepository);
+const getTodoUseCase = new GetTodoUseCase(todoAccessService, todoRepository);
+const shareTodoUseCase = new ShareTodoUseCase(todoRepository, userRepository);
+const updateTodoItemUseCase = new UpdateTodoItemUseCase(todoAccessService, todoRepository);
 const todoController = new TodoController(
   addTodoItemUseCase,
   changeOrderTodoItemUseCase,

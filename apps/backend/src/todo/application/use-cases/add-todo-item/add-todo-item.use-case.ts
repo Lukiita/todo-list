@@ -1,7 +1,11 @@
 import { TodoNotFoundError, TodoRepository } from '../../../domain';
+import { TodoAccessService } from '../../services';
 
 export class AddTodoItemUseCase {
-  constructor(private todoRepository: TodoRepository) { }
+  constructor(
+    private readonly todoAccessService: TodoAccessService,
+    private readonly todoRepository: TodoRepository,
+  ) { }
 
   public async execute(input: AddTodoItemInput): Promise<AddTodoItemOutput> {
     const todo = await this.todoRepository.getById(input.todoId);
@@ -9,6 +13,7 @@ export class AddTodoItemUseCase {
       throw new TodoNotFoundError(input.todoId);
     }
 
+    await this.todoAccessService.execute(todo, input.userId);
     todo.addTodoItem(input.content);
     await this.todoRepository.update(todo);
   }

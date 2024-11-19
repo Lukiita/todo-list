@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import { TokenPayload } from '../../../user';
 import { AddTodoItemUseCase, ChangeOrderTodoItemUseCase, CreateTodoUseCase, GetTodoUseCase, ShareTodoUseCase, UpdateTodoItemUseCase } from '../../application';
 export class TodoController {
   constructor(
@@ -12,9 +13,10 @@ export class TodoController {
 
   async create(req: Request, res: Response, next: NextFunction) {
     try {
+      const user = req.user as TokenPayload;
       const createTodoOutput = await this.createTodoUseCase.execute({
         title: req.body.title,
-        userId: req.body.userId,
+        userId: user.id,
       });
 
       res.status(201).send(createTodoOutput);
@@ -25,7 +27,8 @@ export class TodoController {
 
   async getById(req: Request, res: Response, next: NextFunction) {
     try {
-      const todo = await this.getTodoUseCase.execute({ todoId: req.params.todoId });
+      const user = req.user as TokenPayload;
+      const todo = await this.getTodoUseCase.execute({ todoId: req.params.todoId, userId: user.id });
 
       res.status(200).send(todo);
     } catch (error) {
@@ -35,10 +38,11 @@ export class TodoController {
 
   async addItem(req: Request, res: Response, next: NextFunction) {
     try {
+      const user = req.user as TokenPayload;
       await this.addTodoItemUseCase.execute({
         todoId: req.params.todoId,
         content: req.body.content,
-        userId: req.body.userId,
+        userId: user.id,
       });
 
       res.status(201).send();
@@ -49,11 +53,12 @@ export class TodoController {
 
   async updateItem(req: Request, res: Response, next: NextFunction) {
     try {
+      const user = req.user as TokenPayload;
       await this.updateTodoItemUseCase.execute({
         todoId: req.params.todoId,
         todoItemId: req.params.itemId,
         content: req.body.content,
-        userId: req.body.userId,
+        userId: user.id,
       });
 
       res.status(200).send();
@@ -64,11 +69,12 @@ export class TodoController {
 
   async changeOrderItem(req: Request, res: Response, next: NextFunction) {
     try {
+      const user = req.user as TokenPayload;
       await this.changeOrderTodoItemUseCase.execute({
         todoId: req.params.todoId,
         todoItemId: req.params.itemId,
         newOrder: req.body.newOrder,
-        userId: req.body.userId,
+        userId: user.id,
       });
 
       res.status(200).send();
@@ -79,9 +85,10 @@ export class TodoController {
 
   async share(req: Request, res: Response, next: NextFunction) {
     try {
+      const user = req.user as TokenPayload;
       await this.shareTodoUseCase.execute({
         todoId: req.params.todoId,
-        userId: req.body.userId,
+        userId: user.id,
         emailToShare: req.body.email,
       });
 

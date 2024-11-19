@@ -1,7 +1,11 @@
 import { TodoNotFoundError, TodoRepository } from '../../../domain';
+import { TodoAccessService } from '../../services';
 
 export class ChangeOrderTodoItemUseCase {
-  constructor(private todoRepository: TodoRepository) { }
+  constructor(
+    private readonly todoAccessService: TodoAccessService,
+    private readonly todoRepository: TodoRepository,
+  ) { }
 
   public async execute(input: ChangeOrderTaskInput): Promise<ChangeOrderTaskOutput> {
     const todo = await this.todoRepository.getById(input.todoId);
@@ -9,6 +13,7 @@ export class ChangeOrderTodoItemUseCase {
       throw new TodoNotFoundError(input.todoId);
     }
 
+    await this.todoAccessService.execute(todo, input.userId);
     const itemToMove = todo.items.find((item) => item.id === input.todoItemId);
     if (!itemToMove) {
       throw new Error('Todo item not found');

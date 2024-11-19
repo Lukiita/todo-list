@@ -1,4 +1,6 @@
+import { UserInMemoryRepository } from '../../../../user';
 import { TodoInMemoryRepository } from '../../../infra';
+import { TodoAccessService } from '../../services';
 import { CreateTodoUseCase } from '../create-todo/create-todo.use-case';
 import { GetTodoUseCase } from './get-todo.use-case';
 
@@ -8,9 +10,11 @@ describe('CreateTodoListUseCase Tests', () => {
   let todoInMemoryRepository: TodoInMemoryRepository;
 
   beforeEach(() => {
+    const userRepository = new UserInMemoryRepository();
+    const todoAccessService = new TodoAccessService(userRepository);
     todoInMemoryRepository = new TodoInMemoryRepository();
     createTodoUseCase = new CreateTodoUseCase(todoInMemoryRepository);
-    getTodoUseCase = new GetTodoUseCase(todoInMemoryRepository);
+    getTodoUseCase = new GetTodoUseCase(todoAccessService, todoInMemoryRepository);
   });
 
   it('should create a todo', async () => {
@@ -19,7 +23,7 @@ describe('CreateTodoListUseCase Tests', () => {
       userId: '123e4567-e89b-12d3-a456-426614174000',
     });
 
-    const todo = await getTodoUseCase.execute({ todoId });
+    const todo = await getTodoUseCase.execute({ todoId, userId: '123e4567-e89b-12d3-a456-426614174000' });
     expect(todo).toBeDefined();
     expect(todo).toEqual({
       id: todo.id,

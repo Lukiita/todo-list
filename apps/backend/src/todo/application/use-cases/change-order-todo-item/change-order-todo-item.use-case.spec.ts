@@ -1,5 +1,7 @@
+import { UserInMemoryRepository } from '../../../../user';
 import { Todo, TodoRepository } from '../../../domain';
 import { TodoInMemoryRepository } from '../../../infra';
+import { TodoAccessService } from '../../services';
 import { AddTodoItemUseCase } from '../add-todo-item/add-todo-item.use-case';
 import { CreateTodoUseCase } from '../create-todo/create-todo.use-case';
 import { ChangeOrderTodoItemUseCase } from './change-order-todo-item.use-case';
@@ -11,10 +13,12 @@ describe('AddTodoItem Tests', () => {
   let todoRepository: TodoRepository;
 
   beforeEach(() => {
+    const userRepository = new UserInMemoryRepository();
+    const todoAccessService = new TodoAccessService(userRepository);
     todoRepository = new TodoInMemoryRepository();
-    addTodoItemUseCase = new AddTodoItemUseCase(todoRepository);
+    addTodoItemUseCase = new AddTodoItemUseCase(todoAccessService, todoRepository);
     createTodoUseCase = new CreateTodoUseCase(todoRepository);
-    changeOrderTodoItem = new ChangeOrderTodoItemUseCase(todoRepository);
+    changeOrderTodoItem = new ChangeOrderTodoItemUseCase(todoAccessService, todoRepository);
   });
 
   it('should change order of todo item', async () => {
