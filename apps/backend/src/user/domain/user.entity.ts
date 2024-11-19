@@ -12,7 +12,7 @@ type UserCreateProps = {
   password: string;
 };
 
-type UserProps = {
+export type UserProps = {
   id: string;
   name: string;
   email: string;
