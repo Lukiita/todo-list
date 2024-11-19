@@ -89,6 +89,10 @@ export class User extends BaseEntity {
     this._password = new Password(password);
   }
 
+  public matchesPassword(password: string): boolean {
+    return this._password.matches(password);
+  }
+
   public toJSON(): UserProps {
     return {
       id: this.id,
