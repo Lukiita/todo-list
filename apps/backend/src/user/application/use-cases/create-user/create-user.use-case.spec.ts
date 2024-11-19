@@ -3,7 +3,7 @@ import { UserAlreadyExistsError } from '../../../domain/errors';
 import { UserInMemoryRepository } from '../../../infra';
 import { CreateUserUseCase } from './create-user.use-case';
 
-describe('CreateTodoListUseCase Tests', () => {
+describe('CreateUserUseCase Tests', () => {
   let createUserUseCase: CreateUserUseCase;
   let userInMemoryRepository: UserInMemoryRepository;
 

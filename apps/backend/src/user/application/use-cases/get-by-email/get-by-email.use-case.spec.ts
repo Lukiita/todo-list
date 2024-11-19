@@ -3,7 +3,7 @@ import { UserInMemoryRepository } from '../../../infra';
 import { CreateUserUseCase } from '../create-user/create-user.use-case';
 import { GetByEmailUseCase } from './get-by-email.use-case';
 
-describe('CreateTodoListUseCase Tests', () => {
+describe('GetByEmailUseCase Tests', () => {
   let createUserUseCase: CreateUserUseCase;
   let getByEmailUseCase: GetByEmailUseCase;
   let userInMemoryRepository: UserInMemoryRepository;
