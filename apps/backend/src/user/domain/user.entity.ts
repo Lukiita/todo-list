@@ -38,6 +38,10 @@ export class User extends BaseEntity {
     return new User(props);
   }
 
+  public static restore(props: UserConstructorProps): User {
+    return new User(props);
+  }
+
   public get name(): string {
     return this._name;
   }
