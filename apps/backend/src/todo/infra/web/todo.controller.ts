@@ -70,14 +70,14 @@ export class TodoController {
   async changeOrderItem(req: Request, res: Response, next: NextFunction) {
     try {
       const user = req.user as TokenPayload;
-      await this.changeOrderTodoItemUseCase.execute({
+      const changeOrderOutput = await this.changeOrderTodoItemUseCase.execute({
         todoId: req.params.todoId,
         todoItemId: req.params.itemId,
         newOrder: req.body.newOrder,
         userId: user.id,
       });
 
-      res.status(200).send();
+      res.status(200).send(changeOrderOutput);
     } catch (error) {
       next(error);
     }

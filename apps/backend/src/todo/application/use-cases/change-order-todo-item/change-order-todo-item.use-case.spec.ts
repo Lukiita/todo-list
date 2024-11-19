@@ -69,5 +69,29 @@ describe('AddTodoItem Tests', () => {
     expect(todo.items[0].content).toBe('Content of the todo item 3');
     expect(todo.items[1].content).toBe('Content of the todo item 2');
     expect(todo.items[2].content).toBe('Content of the todo item 1');
+
+    itemToMove = todo.items[0];
+    await changeOrderTodoItem.execute({
+      todoId,
+      todoItemId: itemToMove.id,
+      userId: '123e4567-e89b-12d3-a456-426614174000',
+      newOrder: 1,
+    });
+
+    expect(todo.items[0].content).toBe('Content of the todo item 2');
+    expect(todo.items[1].content).toBe('Content of the todo item 3');
+    expect(todo.items[2].content).toBe('Content of the todo item 1');
+
+    itemToMove = todo.items[0];
+    await changeOrderTodoItem.execute({
+      todoId,
+      todoItemId: itemToMove.id,
+      userId: '123e4567-e89b-12d3-a456-426614174000',
+      newOrder: 2,
+    });
+
+    expect(todo.items[0].content).toBe('Content of the todo item 3');
+    expect(todo.items[1].content).toBe('Content of the todo item 1');
+    expect(todo.items[2].content).toBe('Content of the todo item 2');
   });
 });

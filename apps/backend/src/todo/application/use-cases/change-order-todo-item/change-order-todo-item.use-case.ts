@@ -1,4 +1,4 @@
-import { TodoNotFoundError, TodoRepository } from '../../../domain';
+import { TodoNotFoundError, TodoProps, TodoRepository } from '../../../domain';
 import { TodoAccessService } from '../../services';
 
 export class ChangeOrderTodoItemUseCase {
@@ -26,7 +26,7 @@ export class ChangeOrderTodoItemUseCase {
       if (item.id !== itemToMove.id) {
         const inferiorLimit = Math.min(originalOrder, input.newOrder);
         const superiorLimit = Math.max(originalOrder, input.newOrder);
-        const isBetween = item.order >= inferiorLimit && item.order < superiorLimit;
+        const isBetween = item.order >= inferiorLimit && item.order <= superiorLimit;
         if (isBetween) {
           item.updateOrder(originalOrder < input.newOrder ? item.order - 1 : item.order + 1);
         }
@@ -34,6 +34,7 @@ export class ChangeOrderTodoItemUseCase {
     }
 
     await this.todoRepository.update(todo);
+    return todo.toJSON();
   }
 }
 
@@ -44,4 +45,4 @@ type ChangeOrderTaskInput = {
   newOrder: number;
 };
 
-type ChangeOrderTaskOutput = void;
+type ChangeOrderTaskOutput = TodoProps;
