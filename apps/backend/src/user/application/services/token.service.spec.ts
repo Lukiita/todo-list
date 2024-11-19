@@ -5,7 +5,7 @@ jest.mock('jsonwebtoken');
 
 describe('TokenService', () => {
   const tokenService = new TokenService();
-  const payload = { userId: '123', email: 'test@example.com' };
+  const payload = { id: '123', email: 'test@example.com' };
   const token = 'mockedToken';
   const SECRET_KEY = process.env.JWT_SECRET as string;
 

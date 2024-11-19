@@ -2,6 +2,7 @@
 import 'dotenv/config';
 import express from "express";
 import * as admin from 'firebase-admin';
+import { authenticateMiddleware } from './shared';
 import errorHandler from './shared/infra/middlewares/error-handler.middleware';
 import { router as todoRoutes } from './todo';
 import { AddTodoItemUseCase, ChangeOrderTodoItemUseCase, CreateTodoUseCase, GetTodoUseCase, ShareTodoUseCase, UpdateTodoItemUseCase } from './todo/application';
@@ -25,6 +26,24 @@ admin.initializeApp({
 const app = express();
 app.use(express.json());
 
+const userRepository = new UserFirestoreRepository();
+const createUserUseCase = new CreateUserUseCase(userRepository);
+const getUserByEmalUseCase = new GetByEmailUseCase(userRepository);
+const tokenService = new TokenService();
+const loginUseCase = new LoginUseCase(userRepository, tokenService);
+const userController = new UserController(
+  createUserUseCase,
+  getUserByEmalUseCase,
+  loginUseCase
+);
+app.use("/users", (req, res, next) => {
+  if (req.path === "/login") {
+    return next();
+  } else {
+    authenticateMiddleware(tokenService)(req, res, next);
+  }
+}, userRoutes(userController));
+
 const todoRepository = new TodoFirestoreRepository();
 const addTodoItemUseCase = new AddTodoItemUseCase(todoRepository);
 const changeOrderTodoItemUseCase = new ChangeOrderTodoItemUseCase(todoRepository);
@@ -40,19 +59,9 @@ const todoController = new TodoController(
   shareTodoUseCase,
   updateTodoItemUseCase,
 );
-app.use("/todos", todoRoutes(todoController));
+app.use("/todos", authenticateMiddleware(tokenService), todoRoutes(todoController));
 
-const userRepository = new UserFirestoreRepository();
-const createUserUseCase = new CreateUserUseCase(userRepository);
-const getUserByEmalUseCase = new GetByEmailUseCase(userRepository);
-const tokenService = new TokenService();
-const loginUseCase = new LoginUseCase(userRepository, tokenService);
-const userController = new UserController(
-  createUserUseCase,
-  getUserByEmalUseCase,
-  loginUseCase
-);
-app.use("/users", userRoutes(userController));
+
 
 // Middleware de tratamento de erros
 app.use(errorHandler);

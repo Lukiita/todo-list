@@ -19,7 +19,7 @@ export class LoginUseCase {
       throw new InvalidCredentialsError();
     }
 
-    const token = this.tokenService.generateToken({ userId: user.id, email: user.email });
+    const token = this.tokenService.generateToken({ id: user.id, email: user.email });
     return {
       token,
     };
