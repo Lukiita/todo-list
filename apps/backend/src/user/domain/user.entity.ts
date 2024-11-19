@@ -30,12 +30,16 @@ export class User extends BaseEntity {
     super(props);
     this._name = props.name;
     this._email = new Email(props.email);
-    this._password = new Password(props.password);
+    this._password = Password.restore(props.password);
     this.validate();
   }
 
   public static create(props: UserCreateProps): User {
-    return new User(props);
+    const password = Password.create(props.password);
+    return new User({
+      ...props,
+      password: password.value,
+    });
   }
 
   public static restore(props: UserConstructorProps): User {
@@ -86,7 +90,7 @@ export class User extends BaseEntity {
   }
 
   public updatePassword(password: string): void {
-    this._password = new Password(password);
+    this._password = Password.create(password);
   }
 
   public matchesPassword(password: string): boolean {

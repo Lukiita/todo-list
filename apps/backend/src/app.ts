@@ -7,6 +7,15 @@ import { router as todoRoutes } from './todo';
 import { AddTodoItemUseCase, ChangeOrderTodoItemUseCase, CreateTodoUseCase, GetTodoUseCase, ShareTodoUseCase, UpdateTodoItemUseCase } from './todo/application';
 import { TodoFirestoreRepository } from './todo/infra/repositories/firestore/todo-firestore.repository';
 import { TodoController } from './todo/infra/web/todo.controller';
+import {
+  CreateUserUseCase,
+  GetByEmailUseCase,
+  LoginUseCase,
+  TokenService,
+  UserController,
+  UserFirestoreRepository,
+  router as userRoutes
+} from './user';
 
 const serviceAccount = process.env.GOOGLE_APPLICATION_CREDENTIALS as string;
 admin.initializeApp({
@@ -32,6 +41,18 @@ const todoController = new TodoController(
   updateTodoItemUseCase,
 );
 app.use("/todos", todoRoutes(todoController));
+
+const userRepository = new UserFirestoreRepository();
+const createUserUseCase = new CreateUserUseCase(userRepository);
+const getUserByEmalUseCase = new GetByEmailUseCase(userRepository);
+const tokenService = new TokenService();
+const loginUseCase = new LoginUseCase(userRepository, tokenService);
+const userController = new UserController(
+  createUserUseCase,
+  getUserByEmalUseCase,
+  loginUseCase
+);
+app.use("/users", userRoutes(userController));
 
 // Middleware de tratamento de erros
 app.use(errorHandler);

@@ -7,21 +7,20 @@ const HASH_ITERATIONS = 10000;
 const KEY_LENGTH = 64;
 const DIGEST = 'sha256';
 export class Password extends ValueObject {
-  public readonly value: string;
 
-  constructor(plainPassword: string) {
+
+  private constructor(public readonly value: string) {
     super();
-    this.validatePassword(plainPassword);
-    this.value = this.hashPassword(plainPassword);
   }
 
-  private static hashWithSalt(plainPassword: string, salt: string): string {
-    return crypto
-      .pbkdf2Sync(plainPassword, salt, HASH_ITERATIONS, KEY_LENGTH, DIGEST)
-      .toString('hex');
+  public static create(plainPassword: string): Password {
+    Password.validatePassword(plainPassword);
+    const hashPassword = Password.hashPassword(plainPassword);
+    const password = new Password(hashPassword);
+    return password;
   }
 
-  private validatePassword(plainPassword: string): void {
+  private static validatePassword(plainPassword: string): void {
     if (!plainPassword) {
       throw new InvalidPasswordError('Password is required');
     }
@@ -39,10 +38,29 @@ export class Password extends ValueObject {
     }
   }
 
-  private hashPassword(plainPassword: string): string {
+  private static hashPassword(plainPassword: string): string {
     const salt = crypto.randomBytes(SALT_LENGTH).toString('hex');
     const hash = Password.hashWithSalt(plainPassword, salt);
     return `${salt}:${hash}`;
+  }
+
+  private static hashWithSalt(plainPassword: string, salt: string): string {
+    return crypto
+      .pbkdf2Sync(plainPassword, salt, HASH_ITERATIONS, KEY_LENGTH, DIGEST)
+      .toString('hex');
+  }
+
+  public static restore(hashPassword: string): Password {
+    const validHash = Password.isValidHash(hashPassword);
+    if (!validHash) {
+      throw new InvalidPasswordError('Invalid password hash format');
+    }
+
+    return new Password(hashPassword);
+  }
+
+  private static isValidHash(hashedPassword: string): boolean {
+    return /^[a-f0-9]{32}:[a-f0-9]{128}$/.test(hashedPassword);
   }
 
   public matches(plainPassword: string): boolean {
