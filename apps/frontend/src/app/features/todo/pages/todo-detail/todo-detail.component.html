@@ -1,0 +1,46 @@
+<div class="flex flex-col items-center">
+  <div class="w-full max-w-3xl bg-white shadow-lg rounded-lg">
+    <div class="flex items-center justify-between bg-blue-500 text-white px-6 py-4 rounded-t-lg">
+      <button class="flex items-center text-white hover:text-gray-200 transition" routerLink="../">
+        <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Voltar
+      </button>
+      <h2 class="text-xl font-bold">Detalhes do Todo</h2>
+      <div class="w-16"></div>
+    </div>
+
+    <div class="p-8">
+      <!-- Lista de Tasks -->
+      <ul cdkDropList (cdkDropListDropped)="onDrop($event)" class="space-y-2">
+        @for (task of todo?.tasks; track $index; let i = $index) {
+        <li cdkDrag class="flex items-center bg-gray-100 p-3 rounded-lg shadow-sm border border-gray-300">
+          <!-- Checkbox -->
+          <input type="checkbox" [(ngModel)]="task.completed" class="mr-3 h-5 w-5 cursor-pointer" />
+
+          <!-- Título da tarefa -->
+          <span class="flex-1 text-gray-800" [ngClass]="{ 'line-through text-gray-400': task.completed }">
+            {{ task.name }}
+          </span>
+
+          <!-- Ícones para remover -->
+          <button (click)="removeTask(i)" class="text-red-500 hover:text-red-700 ml-3">
+            Remover
+          </button>
+        </li>
+        }
+      </ul>
+
+      <!-- Adicionar nova tarefa -->
+      <div class="mt-4 flex items-center">
+        <input [(ngModel)]="newTaskName" placeholder="Adicione uma nova tarefa..."
+          class="flex-1 border border-gray-300 p-2 rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-500" />
+        <button (click)="addTask()" class="ml-3 bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600">
+          Adicionar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
