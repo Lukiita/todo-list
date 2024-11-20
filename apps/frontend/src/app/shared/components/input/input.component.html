@@ -1,0 +1,11 @@
+<div class="mb-4">
+  <label [for]="id" class="block text-sm font-medium text-gray-700">{{ label }}</label>
+  <input
+    [id]="id"
+    [type]="type"
+    [placeholder]="placeholder"
+    (input)="onInputChange($event)"
+    (blur)="onTouched()"
+    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"
+  />
+</div>
