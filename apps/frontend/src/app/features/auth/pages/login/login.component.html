@@ -11,7 +11,7 @@
         label="Email"
         placeholder="you@example.com"
         formControlName="email"
-        class="mb-4"
+        errorMessage="Email é obrigatório e deve ser um email válido"
       ></app-input>
 
       <app-input
@@ -20,10 +20,13 @@
         label="Senha"
         placeholder="••••••••"
         formControlName="password"
-        class="mb-6"
+        class="mb-1"
+        errorMessage="Senha é obrigatória e deve ter no mínimo 8 caracteres"
       ></app-input>
 
-      <app-button (click)="login()">Login</app-button>
+      <div class="mt-4">
+        <app-button (click)="login()">Login</app-button>
+      </div>
     </form>
   </div>
 </div>
