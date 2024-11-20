@@ -282,6 +282,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@angular/cdk@npm:^19.0.0":
+  version: 19.0.0
+  resolution: "@angular/cdk@npm:19.0.0"
+  dependencies:
+    parse5: "npm:^7.1.2"
+    tslib: "npm:^2.3.0"
+  peerDependencies:
+    "@angular/common": ^19.0.0 || ^20.0.0
+    "@angular/core": ^19.0.0 || ^20.0.0
+    rxjs: ^6.5.3 || ^7.4.0
+  dependenciesMeta:
+    parse5:
+      optional: true
+  checksum: 10c0/542659c4fd19a08514b26c4ab5428ce1efcae6921243eb13d6bd27ed2f3a63466fc1625e087e9509da381cb9aa0ffded1ecd102ab9c84ad689916f4b475bbe44
+  languageName: node
+  linkType: hard
+
 "@angular/cli@npm:^18.2.11":
   version: 18.2.12
   resolution: "@angular/cli@npm:18.2.12"
@@ -451,7 +468,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:7.25.2":
+"@babel/core@npm:7.25.2, @babel/core@npm:^7.12.3":
   version: 7.25.2
   resolution: "@babel/core@npm:7.25.2"
   dependencies:
@@ -474,7 +491,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:^7.11.6, @babel/core@npm:^7.12.3, @babel/core@npm:^7.23.9":
+"@babel/core@npm:^7.11.6, @babel/core@npm:^7.23.9":
   version: 7.26.0
   resolution: "@babel/core@npm:7.26.0"
   dependencies:
@@ -910,7 +927,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-import-attributes@npm:7.24.7":
+"@babel/plugin-syntax-import-attributes@npm:7.24.7, @babel/plugin-syntax-import-attributes@npm:^7.24.7":
   version: 7.24.7
   resolution: "@babel/plugin-syntax-import-attributes@npm:7.24.7"
   dependencies:
@@ -918,17 +935,6 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.0.0-0
   checksum: 10c0/eccc54d0f03c96d0eec7a6e2fa124dadbc7298345b62ffc4238f173308c4325b5598f139695ff05a95cf78412ef6903599e4b814496612bf39aad4715a16375b
-  languageName: node
-  linkType: hard
-
-"@babel/plugin-syntax-import-attributes@npm:^7.24.7":
-  version: 7.26.0
-  resolution: "@babel/plugin-syntax-import-attributes@npm:7.26.0"
-  dependencies:
-    "@babel/helper-plugin-utils": "npm:^7.25.9"
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  checksum: 10c0/e594c185b12bfe0bbe7ca78dfeebe870e6d569a12128cac86f3164a075fe0ff70e25ddbd97fd0782906b91f65560c9dc6957716b7b4a68aba2516c9b7455e352
   languageName: node
   linkType: hard
 
@@ -4355,7 +4361,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/cors@npm:^2.8.12":
+"@types/cors@npm:^2, @types/cors@npm:^2.8.12":
   version: 2.8.17
   resolution: "@types/cors@npm:2.8.17"
   dependencies:
@@ -5501,12 +5507,14 @@ __metadata:
     "@swc/cli": "npm:^0.5.0"
     "@swc/core": "npm:^1.9.2"
     "@swc/jest": "npm:^0.2.37"
+    "@types/cors": "npm:^2"
     "@types/express": "npm:^5.0.0"
     "@types/jest": "npm:^29.5.14"
     "@types/jsonwebtoken": "npm:^9"
     "@types/lodash": "npm:^4"
     "@types/node": "npm:^22.9.0"
     "@types/uuid": "npm:^10.0.0"
+    cors: "npm:^2.8.5"
     dotenv: "npm:^16.4.5"
     express: "npm:^4.21.1"
     firebase-admin: "npm:^13.0.0"
@@ -6347,7 +6355,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cors@npm:~2.8.5":
+"cors@npm:^2.8.5, cors@npm:~2.8.5":
   version: 2.8.5
   resolution: "cors@npm:2.8.5"
   dependencies:
@@ -7811,6 +7819,7 @@ __metadata:
   dependencies:
     "@angular-devkit/build-angular": "npm:^18.2.11"
     "@angular/animations": "npm:^18.2.0"
+    "@angular/cdk": "npm:^19.0.0"
     "@angular/cli": "npm:^18.2.11"
     "@angular/common": "npm:^18.2.0"
     "@angular/compiler": "npm:^18.2.0"
@@ -11328,7 +11337,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"parse5@npm:^7.0.0":
+"parse5@npm:^7.0.0, parse5@npm:^7.1.2":
   version: 7.2.1
   resolution: "parse5@npm:7.2.1"
   dependencies:

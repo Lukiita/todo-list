@@ -1,4 +1,5 @@
 
+import cors from "cors";
 import 'dotenv/config';
 import express from "express";
 import * as admin from 'firebase-admin';
@@ -25,6 +26,7 @@ admin.initializeApp({
 });
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 const userRepository = new UserFirestoreRepository();
