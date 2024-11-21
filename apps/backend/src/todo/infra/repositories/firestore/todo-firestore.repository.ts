@@ -41,26 +41,42 @@ export class TodoFirestoreRepository implements TodoRepository {
 
   }
 
-  public async getByOwnerId(ownerId: string): Promise<Todo[]> {
+  public async getByUserAccess(ownerId: string, email: string): Promise<Todo[]> {
     try {
-      const snapshot = await this.collection
+      const snapshotOwnerId = await this.collection
         .where('ownerId', '==', ownerId)
+        .orderBy('createdAt', 'desc')
+        .get();
+      const snapshotEmail = await this.collection
+        .where('sharedWith', 'array-contains', email)
         .orderBy('createdAt', 'desc')
         .get();
 
       const todos: Todo[] = [];
-      for (const doc of snapshot.docs) {
-        const todo = doc.data() as TodoProps;
-        const todoItems = await this.getSubCollection(doc.id).get();
-        const items = todoItems.docs.map((item) => item.data() as TodoItemProps);
-        todos.push(this.todoFirestoreMapper.toEntity(todo, items));
+      for (const doc of snapshotOwnerId.docs) {
+        const todo = await this.mapTodoPropsToEntity(doc.data() as TodoProps);
+        todos.push(todo);
       }
 
-      return todos;
+      for (const doc of snapshotEmail.docs) {
+        const todoProps = doc.data() as TodoProps;
+        if (!todos.some((t) => t.id === todoProps.id)) {
+          const todo = await this.mapTodoPropsToEntity(todoProps);
+          todos.push(todo);
+        }
+      }
+
+      return todos.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
     } catch (error) {
       console.error('Error getting todos by owner id', error);
       throw error;
     }
+  }
+
+  private async mapTodoPropsToEntity(todoProps: TodoProps) {
+    const todoItems = await this.getSubCollection(todoProps.id).get();
+    const items = todoItems.docs.map((item) => item.data() as TodoItemProps);
+    return this.todoFirestoreMapper.toEntity(todoProps, items);
   }
 
   public async update(entity: Todo): Promise<void> {

@@ -1,12 +1,22 @@
 import { NextFunction, Request, Response } from 'express';
 import { TokenPayload } from '../../../user';
-import { AddTodoItemUseCase, ChangeOrderTodoItemUseCase, CreateTodoUseCase, GetTodoUseCase, ShareTodoUseCase, UpdateTodoItemUseCase } from '../../application';
+import {
+  AddTodoItemUseCase,
+  ChangeOrderTodoItemUseCase,
+  CreateTodoUseCase,
+  GetTodoUseCase,
+  ListTodosUseCase,
+  ShareTodoUseCase,
+  UpdateTodoItemUseCase
+} from '../../application';
+
 export class TodoController {
   constructor(
     private readonly addTodoItemUseCase: AddTodoItemUseCase,
     private readonly changeOrderTodoItemUseCase: ChangeOrderTodoItemUseCase,
     private readonly createTodoUseCase: CreateTodoUseCase,
     private readonly getTodoUseCase: GetTodoUseCase,
+    private readonly listTodosUseCase: ListTodosUseCase,
     private readonly shareTodoUseCase: ShareTodoUseCase,
     private readonly updateTodoItemUseCase: UpdateTodoItemUseCase,
   ) { }
@@ -31,6 +41,17 @@ export class TodoController {
       const todo = await this.getTodoUseCase.execute({ todoId: req.params.todoId, userId: user.id });
 
       res.status(200).send(todo);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async listTodos(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = req.user as TokenPayload;
+      const todos = await this.listTodosUseCase.execute({ userId: user.id, email: user.email });
+
+      res.status(200).send(todos);
     } catch (error) {
       next(error);
     }

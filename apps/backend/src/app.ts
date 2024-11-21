@@ -6,7 +6,7 @@ import * as admin from 'firebase-admin';
 import { authenticateMiddleware } from './shared';
 import errorHandler from './shared/infra/middlewares/error-handler.middleware';
 import { router as todoRoutes } from './todo';
-import { AddTodoItemUseCase, ChangeOrderTodoItemUseCase, CreateTodoUseCase, GetTodoUseCase, ShareTodoUseCase, UpdateTodoItemUseCase } from './todo/application';
+import { AddTodoItemUseCase, ChangeOrderTodoItemUseCase, CreateTodoUseCase, GetTodoUseCase, ListTodosUseCase, ShareTodoUseCase, UpdateTodoItemUseCase } from './todo/application';
 import { TodoAccessService } from './todo/application/services';
 import { TodoFirestoreRepository } from './todo/infra/repositories/firestore/todo-firestore.repository';
 import { TodoController } from './todo/infra/web/todo.controller';
@@ -55,11 +55,13 @@ const createTodoUseCase = new CreateTodoUseCase(todoRepository);
 const getTodoUseCase = new GetTodoUseCase(todoAccessService, todoRepository);
 const shareTodoUseCase = new ShareTodoUseCase(todoRepository, userRepository);
 const updateTodoItemUseCase = new UpdateTodoItemUseCase(todoAccessService, todoRepository);
+const listTodoUseCase = new ListTodosUseCase(todoRepository, userRepository);
 const todoController = new TodoController(
   addTodoItemUseCase,
   changeOrderTodoItemUseCase,
   createTodoUseCase,
   getTodoUseCase,
+  listTodoUseCase,
   shareTodoUseCase,
   updateTodoItemUseCase,
 );

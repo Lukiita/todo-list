@@ -6,6 +6,7 @@ export const router = (todoController: TodoController) => {
 
   // Usar a instância do controller
   router.post('/', (req, res, next) => todoController.create(req, res, next));
+  router.get('/', (req, res, next) => todoController.listTodos(req, res, next));
   router.get('/:todoId', (req, res, next) => todoController.getById(req, res, next));
   router.post('/:todoId/items', (req, res, next) => todoController.addItem(req, res, next));
   router.put('/:todoId/items/:itemId', (req, res, next) => todoController.updateItem(req, res, next));
