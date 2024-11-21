@@ -1,10 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-
-interface Todo {
-  id: string;
-  title: string;
-}
+import { Todo, TodoService } from '../../services/todo.service';
 
 @Component({
   selector: 'app-todo-list',
@@ -13,11 +9,15 @@ interface Todo {
   templateUrl: './todo-list.component.html',
   styleUrl: './todo-list.component.scss'
 })
-export class TodoListComponent {
-  // Lista de Todos
-  todos: Todo[] = [
-    { id: 'todo-1', title: 'Tarefas de Trabalho' },
-    { id: 'todo-2', title: 'Tarefas Pessoais' },
-    { id: 'todo-3', title: 'Lista de Compras' },
-  ];
+export class TodoListComponent implements OnInit {
+  public todos: Todo[] = [];
+
+  constructor(private readonly todoService: TodoService) { }
+
+  ngOnInit(): void {
+    this.todoService.getTodos()
+      .subscribe(todos => {
+        this.todos = todos;
+      });
+  }
 }

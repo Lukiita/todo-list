@@ -37,7 +37,7 @@ export class LoginComponent {
     const { email, password } = this.loginForm.value;
     this.authService.login(email, password)
       .pipe(
-        tap(() => this.router.navigate(['/todos'], { replaceUrl: true }))
+        tap(() => this.router.navigate([''], { replaceUrl: true }))
       )
       .subscribe();
   }
