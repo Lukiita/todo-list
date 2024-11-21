@@ -7,6 +7,7 @@ import {
   GetTodoUseCase,
   ListTodosUseCase,
   ShareTodoUseCase,
+  ToggleTodoItemCompletionUseCase,
   UpdateTodoItemUseCase
 } from '../../application';
 
@@ -18,6 +19,7 @@ export class TodoController {
     private readonly getTodoUseCase: GetTodoUseCase,
     private readonly listTodosUseCase: ListTodosUseCase,
     private readonly shareTodoUseCase: ShareTodoUseCase,
+    private readonly toggleTodoItemCompletionUseCase: ToggleTodoItemCompletionUseCase,
     private readonly updateTodoItemUseCase: UpdateTodoItemUseCase,
   ) { }
 
@@ -79,6 +81,21 @@ export class TodoController {
         todoId: req.params.todoId,
         todoItemId: req.params.itemId,
         content: req.body.content,
+        userId: user.id,
+      });
+
+      res.status(200).send();
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async toggleTodoItemCompletion(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = req.user as TokenPayload;
+      await this.toggleTodoItemCompletionUseCase.execute({
+        todoId: req.params.todoId,
+        todoItemId: req.params.itemId,
         userId: user.id,
       });
 

@@ -11,7 +11,6 @@ export const authenticateMiddleware = (tokenService: TokenService) => {
     }
 
     const payload = tokenService.verifyToken(token);
-
     if (!payload) {
       res.status(401).json({ error: 'Invalid or expired token' });
       return;

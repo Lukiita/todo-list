@@ -4,5 +4,6 @@ export * from './create-todo/create-todo.use-case';
 export * from './get-todo/get-todo.use-case';
 export * from './list-todos/list-todos.use-case';
 export * from './share-todo/share-todo.use-case';
+export * from './toggle-todo-item-completion/toggle-todo-item-completion.use-case';
 export * from './update-todo-item/update-todo-item.use-case';
 

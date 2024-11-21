@@ -93,6 +93,11 @@ export class TodoItem extends BaseEntity {
     this._completedAt = new Date();
   }
 
+  public uncomplete(): void {
+    this._isCompleted = false;
+    this._completedAt = null;
+  }
+
   public updateParentId(newParentId?: string): void {
     this._parentId = newParentId ? new EntityId(newParentId) : null;
     this._updatedAt = new Date();

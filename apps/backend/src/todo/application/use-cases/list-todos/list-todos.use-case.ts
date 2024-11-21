@@ -1,10 +1,8 @@
-import { UserRepository } from '../../../../user';
 import { TodoProps, TodoRepository } from '../../../domain';
 
 export class ListTodosUseCase {
   constructor(
-    private readonly todoRepository: TodoRepository,
-    private readonly userRepository: UserRepository,
+    private readonly todoRepository: TodoRepository
   ) { }
 
   public async execute(input: ListTodosInput): Promise<ListTodosOutput> {
