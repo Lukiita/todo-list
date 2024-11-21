@@ -9,7 +9,12 @@ export const apiInterceptor: HttpInterceptorFn = (req, next) => {
   }
 
   if (!requestUrl.includes('login')) {
-
+    const token = localStorage.getItem('token');
+    req = req.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`
+      }
+    });
   }
 
   console.log('Request URL', requestUrl);
