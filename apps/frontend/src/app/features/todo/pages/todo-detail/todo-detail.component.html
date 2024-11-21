@@ -8,14 +8,15 @@
         </svg>
         Voltar
       </button>
-      <h2 class="text-xl font-bold">Detalhes do Todo</h2>
+      <h2 class="text-xl font-bold">{{ todo ? todo.title : '' }}</h2>
       <div class="w-16"></div>
     </div>
 
     <div class="p-8">
+      @if (todo) {
       <!-- Lista de Tasks -->
       <ul cdkDropList (cdkDropListDropped)="onDrop($event)" class="space-y-2">
-        @for (task of todo?.items; track $index; let i = $index) {
+        @for (task of todo.items; track $index; let i = $index) {
         <li cdkDrag class="flex items-center bg-gray-100 p-3 rounded-lg shadow-sm border border-gray-300">
           <!-- Checkbox -->
           <input type="checkbox" [(ngModel)]="task.isCompleted" class="mr-3 h-5 w-5 cursor-pointer"
@@ -28,7 +29,7 @@
         </li>
         }
       </ul>
-
+      }
       <!-- Adicionar nova tarefa -->
       <div class="mt-4 flex items-center">
         <input [(ngModel)]="newTaskName" placeholder="Adicione uma nova tarefa..."

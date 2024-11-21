@@ -64,10 +64,6 @@ export class TodoDetailComponent implements OnInit {
     }
   }
 
-  public completeTodoItem(todoItemId: string) {
-
-  }
-
   public toggleTodoItemCompletion(todoItemId: string): void {
     this.todoService.toggleTodoItemCompletion(this.todo.id, todoItemId).subscribe();
   }
