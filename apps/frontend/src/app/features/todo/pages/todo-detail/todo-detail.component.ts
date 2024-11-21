@@ -1,10 +1,11 @@
-import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { NgClass } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { tap } from 'rxjs';
-import { Todo, TodoItem, TodoService } from '../../services/todo.service';
+import { finalize, tap } from 'rxjs';
+import { LoadingService } from '../../../../shared/services/loading.service';
+import { Todo, TodoService } from '../../services/todo.service';
 
 @Component({
   selector: 'app-todo-detail',
@@ -24,6 +25,7 @@ export class TodoDetailComponent implements OnInit {
   public newTaskName = '';
 
   constructor(
+    private readonly loadingService: LoadingService,
     private readonly route: ActivatedRoute,
     private readonly todoService: TodoService
   ) { }
@@ -34,22 +36,22 @@ export class TodoDetailComponent implements OnInit {
   }
 
   private getTodo(todoId: string): void {
+    this.loadingService.present();
     this.todoService.getById(todoId)
+      .pipe(
+        finalize(() => this.loadingService.dismiss())
+      )
       .subscribe(todo => {
         this.todo = todo;
       });
   }
 
-  onDragStart(event: any, taskId: string) {
-    event.dataTransfer.setData('text', taskId);
-  }
-
-  onDragOver(event: any) {
-    event.preventDefault();
-  }
-
-  onDrop(event: CdkDragDrop<string[]>) {
-    console.log(event);
+  public onDrop(event: CdkDragDrop<string[]>): void {
+    const { currentIndex, previousIndex } = event;
+    const todoItem = this.todo.items[previousIndex];
+    console.log(todoItem.content);
+    moveItemInArray(this.todo.items, previousIndex, currentIndex);
+    this.todoService.updateTodoItemOrder(this.todo.id, todoItem.id, currentIndex).subscribe();
   }
 
   public addTodoItem(): void {
@@ -62,14 +64,11 @@ export class TodoDetailComponent implements OnInit {
     }
   }
 
-  shareTask(todoItemId: string) {
-    alert(`Compartilhando a task: ${todoItemId}`);
+  public completeTodoItem(todoItemId: string) {
+
   }
 
-  // Marcar task como concluída
-  markAsCompleted(todoItemId: string) {
-    const task = this.todo?.items.find((item) => item.id === todoItemId) as TodoItem;
-    task.isCompleted = !task.isCompleted;
-    console.log('Task', task);
+  public toggleTodoItemCompletion(todoItemId: string): void {
+    this.todoService.toggleTodoItemCompletion(this.todo.id, todoItemId).subscribe();
   }
 }

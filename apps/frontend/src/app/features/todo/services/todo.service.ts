@@ -42,4 +42,12 @@ export class TodoService {
   public addTodoItem(todoId: string, content: string): Observable<Todo> {
     return this.http.post<Todo>(`/todos/${todoId}/items`, { content });
   }
+
+  public toggleTodoItemCompletion(todoId: string, todoItemId: string): Observable<void> {
+    return this.http.put<void>(`/todos/${todoId}/items/${todoItemId}/toggle-completion`, {});
+  }
+
+  public updateTodoItemOrder(todoId: string, itemId: string, newOrder: number): Observable<void> {
+    return this.http.put<void>(`/todos/${todoId}/items/${itemId}/order`, { newOrder });
+  }
 }

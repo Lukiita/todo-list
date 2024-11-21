@@ -17,7 +17,6 @@ export const apiInterceptor: HttpInterceptorFn = (req, next) => {
     });
   }
 
-  console.log('Request URL', requestUrl);
   req = req.clone({
     url: requestUrl
   });

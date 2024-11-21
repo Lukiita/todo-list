@@ -2,9 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { tap } from 'rxjs';
+import { finalize, tap } from 'rxjs';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
 import { InputComponent } from '../../../../shared/components/input/input.component';
+import { LoadingService } from '../../../../shared/services/loading.service';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -20,6 +21,7 @@ export class LoginComponent {
   constructor(
     private readonly authService: AuthService,
     private readonly fb: FormBuilder,
+    private readonly loadingService: LoadingService,
     private readonly router: Router,
   ) {
     this.loginForm = this.fb.group({
@@ -34,10 +36,12 @@ export class LoginComponent {
       return;
     }
 
+    this.loadingService.present();
     const { email, password } = this.loginForm.value;
     this.authService.login(email, password)
       .pipe(
-        tap(() => this.router.navigate([''], { replaceUrl: true }))
+        tap(() => this.router.navigate([''], { replaceUrl: true })),
+        finalize(() => this.loadingService.dismiss())
       )
       .subscribe();
   }

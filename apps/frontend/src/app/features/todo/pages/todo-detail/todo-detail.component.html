@@ -18,7 +18,8 @@
         @for (task of todo?.items; track $index; let i = $index) {
         <li cdkDrag class="flex items-center bg-gray-100 p-3 rounded-lg shadow-sm border border-gray-300">
           <!-- Checkbox -->
-          <input type="checkbox" [(ngModel)]="task.isCompleted" class="mr-3 h-5 w-5 cursor-pointer" />
+          <input type="checkbox" [(ngModel)]="task.isCompleted" class="mr-3 h-5 w-5 cursor-pointer"
+            (ngModelChange)="toggleTodoItemCompletion(task.id)" />
 
           <!-- Título da tarefa -->
           <span class="flex-1 text-gray-800" [ngClass]="{ 'line-through text-gray-400': task.isCompleted }">
@@ -32,7 +33,8 @@
       <div class="mt-4 flex items-center">
         <input [(ngModel)]="newTaskName" placeholder="Adicione uma nova tarefa..."
           class="flex-1 border border-gray-300 p-2 rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-500" />
-        <button (click)="addTodoItem()" class="ml-3 bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600">
+        <button (click)="addTodoItem()"
+          class="ml-3 bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600">
           Adicionar
         </button>
       </div>
