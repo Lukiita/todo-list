@@ -1,11 +1,11 @@
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { NgClass } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { finalize, tap } from 'rxjs';
 import { LoadingService } from '../../../../shared/services/loading.service';
-import { Todo, TodoService } from '../../services/todo.service';
+import { Todo, TodoItem, TodoService } from '../../services/todo.service';
 
 @Component({
   selector: 'app-todo-detail',
@@ -19,7 +19,9 @@ import { Todo, TodoService } from '../../services/todo.service';
   templateUrl: './todo-detail.component.html',
   styleUrls: ['./todo-detail.component.scss'],
 })
-export class TodoDetailComponent implements OnInit {
+export class TodoDetailComponent implements OnInit, AfterViewChecked {
+  @ViewChild('editInput') editInput!: ElementRef;
+
   public todo!: Todo;
   public showCreateTaskForm = false;
   public newTaskName = '';
@@ -33,6 +35,12 @@ export class TodoDetailComponent implements OnInit {
   ngOnInit() {
     const todoId = this.route.snapshot.paramMap.get('todoId');
     this.getTodo(todoId as string);
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.editInput) {
+      this.editInput.nativeElement.focus();
+    }
   }
 
   private getTodo(todoId: string): void {
@@ -49,16 +57,33 @@ export class TodoDetailComponent implements OnInit {
   public onDrop(event: CdkDragDrop<string[]>): void {
     const { currentIndex, previousIndex } = event;
     const todoItem = this.todo.items[previousIndex];
-    console.log(todoItem.content);
     moveItemInArray(this.todo.items, previousIndex, currentIndex);
     this.todoService.updateTodoItemOrder(this.todo.id, todoItem.id, currentIndex).subscribe();
   }
 
+  public startEditing(item: TodoItem): void {
+    this.todo.items.forEach((t) => (t.isEditing = false));
+    item.isEditing = true;
+  }
+
+  stopEditing(item: TodoItem): void {
+    item.isEditing = false;
+
+    // Validação: não permitir que o campo fique vazio
+    if (!item.content.trim()) {
+      alert('O nome da tarefa não pode ser vazio!');
+      item.content = 'Nova tarefa'; // Valor padrão se vazio
+    }
+  }
+
   public addTodoItem(): void {
+    this.loadingService.present();
     if (this.newTaskName.trim() && this.newTaskName.length >= 5) {
       this.todoService.addTodoItem(this.todo.id, this.newTaskName)
         .pipe(
-          tap(todo => this.todo = todo)
+          tap(todo => this.todo = todo),
+          tap(() => this.newTaskName = ''),
+          finalize(() => this.loadingService.dismiss()),
         )
         .subscribe();
     }

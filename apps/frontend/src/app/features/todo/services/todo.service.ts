@@ -20,6 +20,7 @@ export type TodoItem = {
   completedAt: Date | null;
   order: number;
   parentId: string | null;
+  isEditing?: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
