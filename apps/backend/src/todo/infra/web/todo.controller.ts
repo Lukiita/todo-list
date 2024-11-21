@@ -60,13 +60,13 @@ export class TodoController {
   async addItem(req: Request, res: Response, next: NextFunction) {
     try {
       const user = req.user as TokenPayload;
-      await this.addTodoItemUseCase.execute({
+      const addTodoItemOutput = await this.addTodoItemUseCase.execute({
         todoId: req.params.todoId,
         content: req.body.content,
         userId: user.id,
       });
 
-      res.status(201).send();
+      res.status(201).send(addTodoItemOutput);
     } catch (error) {
       next(error);
     }

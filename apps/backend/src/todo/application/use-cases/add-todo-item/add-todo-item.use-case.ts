@@ -1,4 +1,4 @@
-import { TodoNotFoundError, TodoRepository } from '../../../domain';
+import { TodoNotFoundError, TodoProps, TodoRepository } from '../../../domain';
 import { TodoAccessService } from '../../services';
 
 export class AddTodoItemUseCase {
@@ -16,6 +16,7 @@ export class AddTodoItemUseCase {
     await this.todoAccessService.execute(todo, input.userId);
     todo.addTodoItem(input.content);
     await this.todoRepository.update(todo);
+    return todo.toJSON();
   }
 }
 
@@ -25,4 +26,4 @@ type AddTodoItemInput = {
   userId: string;
 };
 
-type AddTodoItemOutput = void;
+type AddTodoItemOutput = TodoProps;
