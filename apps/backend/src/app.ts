@@ -6,7 +6,7 @@ import * as admin from 'firebase-admin';
 import { authenticateMiddleware } from './shared';
 import errorHandler from './shared/infra/middlewares/error-handler.middleware';
 import { router as todoRoutes } from './todo';
-import { AddTodoItemUseCase, ChangeOrderTodoItemUseCase, CreateTodoUseCase, GetTodoUseCase, ListTodosUseCase, ShareTodoUseCase, ToggleTodoItemCompletionUseCase, UpdateTodoItemUseCase } from './todo/application';
+import { AddTodoItemUseCase, ChangeOrderTodoItemUseCase, CreateTodoUseCase, DeleteTodoItemUseCase, GetTodoUseCase, ListTodosUseCase, ShareTodoUseCase, ToggleTodoItemCompletionUseCase, UpdateTodoItemUseCase } from './todo/application';
 import { TodoAccessService } from './todo/application/services';
 import { TodoFirestoreRepository } from './todo/infra/repositories/firestore/todo-firestore.repository';
 import { TodoController } from './todo/infra/web/todo.controller';
@@ -57,10 +57,13 @@ const shareTodoUseCase = new ShareTodoUseCase(todoRepository, userRepository);
 const updateTodoItemUseCase = new UpdateTodoItemUseCase(todoAccessService, todoRepository);
 const listTodoUseCase = new ListTodosUseCase(todoRepository);
 const toggleTodoItemCompletionUseCase = new ToggleTodoItemCompletionUseCase(todoAccessService, todoRepository);
+const deleteTodoItemUseCase = new DeleteTodoItemUseCase(todoAccessService, todoRepository);
+
 const todoController = new TodoController(
   addTodoItemUseCase,
   changeOrderTodoItemUseCase,
   createTodoUseCase,
+  deleteTodoItemUseCase,
   getTodoUseCase,
   listTodoUseCase,
   shareTodoUseCase,

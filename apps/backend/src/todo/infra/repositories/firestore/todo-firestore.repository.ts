@@ -1,6 +1,6 @@
 
 import { getFirestore } from 'firebase-admin/firestore';
-import { Todo, TodoGetByUserAccessOutput, TodoItem, TodoItemProps, TodoProps, TodoRepository } from '../../../domain';
+import { Todo, TodoGetByUserAccessOutput, TodoItemProps, TodoProps, TodoRepository } from '../../../domain';
 import { TodoFirestoreMapper } from './todo-firestore.mapper';
 
 export class TodoFirestoreRepository implements TodoRepository {
@@ -68,6 +68,7 @@ export class TodoFirestoreRepository implements TodoRepository {
 
       return todos
         .map(todo => ({
+          id: todo.id,
           title: todo.title,
           ownerId: todo.ownerId,
           sharedWith: todo.sharedWith,

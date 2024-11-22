@@ -1,4 +1,4 @@
-import { TodoProps, TodoRepository } from '../../../domain';
+import { TodoGetByUserAccessOutput, TodoRepository } from '../../../domain';
 
 export class ListTodosUseCase {
   constructor(
@@ -6,8 +6,7 @@ export class ListTodosUseCase {
   ) { }
 
   public async execute(input: ListTodosInput): Promise<ListTodosOutput> {
-    const todos = await this.todoRepository.getByUserAccess(input.userId, input.email);
-    return todos.map((todo) => todo.toJSON());
+    return await this.todoRepository.getByUserAccess(input.userId, input.email);
   }
 }
 
@@ -16,4 +15,4 @@ type ListTodosInput = {
   email: string;
 };
 
-type ListTodosOutput = TodoProps[];
+type ListTodosOutput = TodoGetByUserAccessOutput[];

@@ -2,6 +2,7 @@ import { Repository } from '../../shared';
 import { Todo } from './todo.entity';
 
 export type TodoGetByUserAccessOutput = {
+  id: string;
   title: string;
   ownerId: string;
   sharedWith: string[];

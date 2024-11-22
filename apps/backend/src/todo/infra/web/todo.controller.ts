@@ -4,6 +4,7 @@ import {
   AddTodoItemUseCase,
   ChangeOrderTodoItemUseCase,
   CreateTodoUseCase,
+  DeleteTodoItemUseCase,
   GetTodoUseCase,
   ListTodosUseCase,
   ShareTodoUseCase,
@@ -16,6 +17,7 @@ export class TodoController {
     private readonly addTodoItemUseCase: AddTodoItemUseCase,
     private readonly changeOrderTodoItemUseCase: ChangeOrderTodoItemUseCase,
     private readonly createTodoUseCase: CreateTodoUseCase,
+    private readonly deleteTodoItemUseCase: DeleteTodoItemUseCase,
     private readonly getTodoUseCase: GetTodoUseCase,
     private readonly listTodosUseCase: ListTodosUseCase,
     private readonly shareTodoUseCase: ShareTodoUseCase,
@@ -54,6 +56,21 @@ export class TodoController {
       const todos = await this.listTodosUseCase.execute({ userId: user.id, email: user.email });
 
       res.status(200).send(todos);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async share(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = req.user as TokenPayload;
+      await this.shareTodoUseCase.execute({
+        todoId: req.params.todoId,
+        userId: user.id,
+        emailToShare: req.body.email,
+      });
+
+      res.status(200).send();
     } catch (error) {
       next(error);
     }
@@ -121,13 +138,13 @@ export class TodoController {
     }
   }
 
-  async share(req: Request, res: Response, next: NextFunction) {
+  async deleteItem(req: Request, res: Response, next: NextFunction) {
     try {
       const user = req.user as TokenPayload;
-      await this.shareTodoUseCase.execute({
+      await this.deleteTodoItemUseCase.execute({
         todoId: req.params.todoId,
+        itemId: req.params.itemId,
         userId: user.id,
-        emailToShare: req.body.email,
       });
 
       res.status(200).send();
