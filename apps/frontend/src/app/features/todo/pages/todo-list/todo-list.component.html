@@ -13,5 +13,14 @@
       </div>
     }
     </div>
+    <div class="mt-4 flex items-center">
+      <input [(ngModel)]="newTodoTitle" placeholder="Adicione uma nova lista de tarefas..."
+        class="flex-1 border border-gray-300 p-2 rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-500"
+        (keydown.enter)="addTodo()" />
+      <button (click)=" addTodo()"
+        class="ml-3 bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600">
+        Adicionar
+      </button>
+    </div>
   </div>
 </div>

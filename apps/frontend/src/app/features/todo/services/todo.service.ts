@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, switchMap } from 'rxjs';
 
 export type Todo = {
   id: string;
@@ -31,6 +31,13 @@ export type TodoItem = {
 export class TodoService {
 
   constructor(private readonly http: HttpClient) { }
+
+  public createTodo(title: string): Observable<Todo[]> {
+    return this.http.post<Todo>('/todos', { title })
+      .pipe(
+        switchMap(() => this.getTodos())
+      );
+  }
 
   public getTodos(): Observable<Todo[]> {
     return this.http.get<Todo[]>('/todos');
