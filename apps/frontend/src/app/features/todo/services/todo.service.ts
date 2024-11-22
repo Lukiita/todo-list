@@ -47,6 +47,10 @@ export class TodoService {
     return this.http.get<Todo>(`/todos/${todoId}`);
   }
 
+  public shareTodoWithUser(todoId: string, email: string): Observable<void> {
+    return this.http.put<void>(`/todos/${todoId}/share`, { email });
+  }
+
   public addTodoItem(todoId: string, content: string): Observable<Todo> {
     return this.http.post<Todo>(`/todos/${todoId}/items`, { content });
   }
