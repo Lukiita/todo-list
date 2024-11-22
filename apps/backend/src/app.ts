@@ -21,7 +21,7 @@ import {
 } from './user';
 
 const serviceAccount = process.env.GOOGLE_APPLICATION_CREDENTIALS || JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON as string);
-
+console.log(serviceAccount);
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
