@@ -62,4 +62,8 @@ export class TodoService {
   public updateTodoItemOrder(todoId: string, itemId: string, newOrder: number): Observable<void> {
     return this.http.put<void>(`/todos/${todoId}/items/${itemId}/order`, { newOrder });
   }
+
+  public deleteTodoItem(todoId: string, itemId: string): Observable<void> {
+    return this.http.delete<void>(`/todos/${todoId}/items/${itemId}`);
+  }
 }

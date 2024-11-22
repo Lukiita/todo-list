@@ -101,4 +101,9 @@ export class TodoDetailComponent implements OnInit, AfterViewChecked {
   public toggleTodoItemCompletion(todoItemId: string): void {
     this.todoService.toggleTodoItemCompletion(this.todo.id, todoItemId).subscribe();
   }
+
+  public deleteTodoItem(itemId: string, index: number): void {
+    this.todo.items.splice(index, 1)
+    this.todoService.deleteTodoItem(this.todo.id, itemId).subscribe();
+  }
 }
