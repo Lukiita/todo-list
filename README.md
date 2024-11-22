@@ -7,6 +7,31 @@ O objetivo principal deste projeto é demonstrar a capacidade de criar um sistem
 
 ---
 
+## 🌟 **Estimativa de Desenvolvimento e Prazo**
+
+### **Estimativa de Horas por Etapa**
+- **Configuração do Ambiente**: 3h  
+  - Configurar repositório, dependências e banco de dados: **3h**  
+
+- **Backend**: 12h  
+  - Criar APIs para tarefas (criar, editar, deletar, listar): **8h**  
+  - Implementar autenticação básica (login, registro): **4h**  
+
+- **Frontend**: 12h  
+  - Estruturar layout principal (lista de tarefas, formulários): **6h**  
+  - Integração com APIs e ajustes finais: **6h**  
+
+- **Testes e Deploy**: 8h  
+  - Testes gerais (backend e frontend): **5h**  
+  - Configuração e deploy no ambiente de produção: **3h**  
+
+### **Total**: **35 horas**
+
+### **Prazo de Entrega**
+Considerando uma carga diária de trabalho de **7 horas úteis**, o projeto seria concluído em **5 dias úteis**. Por exemplo, se o desenvolvimento começar em uma segunda-feira, a entrega será feita na **sexta-feira da mesma semana**.  
+
+---
+
 ## 🌐 **Links do Projeto**
 - **Frontend (Firebase Hosting):** [https://todo-8b133.web.app/](https://todo-8b133.web.app/)
 
