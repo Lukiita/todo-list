@@ -24,12 +24,17 @@ describe('LoginUseCase', () => {
   });
 
   it('should return a token for valid credentials', async () => {
-    await createUserUseCase.execute({ email: validEmail, password: validPassword, name: 'Test User' });
+    const { userId } = await createUserUseCase.execute({ email: validEmail, password: validPassword, name: 'Test User' });
     tokenService.generateToken.mockReturnValue(validToken);
 
     const result = await loginUseCase.execute({ email: validEmail, password: validPassword });
 
-    expect(result).toEqual({ token: validToken });
+    expect(result).toEqual({
+      userId,
+      email: validEmail,
+      name: 'Test User',
+      token: validToken
+    });
   });
 
   it('should throw an error for invalid credentials', async () => {

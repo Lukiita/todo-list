@@ -22,6 +22,9 @@ export class LoginUseCase {
     const token = this.tokenService.generateToken({ id: user.id, email: user.email });
     return {
       token,
+      userId: user.id,
+      email: user.email,
+      name: user.name,
     };
   }
 }
@@ -32,5 +35,8 @@ type GetByEmailInput = {
 };
 
 type GetByEmalOutput = {
+  userId: string;
+  email: string;
+  name: string;
   token: string;
 };
