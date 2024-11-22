@@ -1,7 +1,7 @@
 import { Todo, TodoItem, TodoItemProps, TodoProps } from '../../../domain';
 
 export class TodoFirestoreMapper {
-  public toEntity(data: TodoProps, todoItems: TodoItemProps[]): Todo {
+  public toEntity(data: TodoProps, todoItems: TodoItemProps[] = []): Todo {
     const items = todoItems.map((item) => TodoItem.restore({
       id: item.id,
       content: item.content,

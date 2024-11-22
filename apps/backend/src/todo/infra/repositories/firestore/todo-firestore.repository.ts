@@ -1,6 +1,6 @@
 
 import { getFirestore } from 'firebase-admin/firestore';
-import { Todo, TodoItemProps, TodoProps, TodoRepository } from '../../../domain';
+import { Todo, TodoGetByUserAccessOutput, TodoItem, TodoItemProps, TodoProps, TodoRepository } from '../../../domain';
 import { TodoFirestoreMapper } from './todo-firestore.mapper';
 
 export class TodoFirestoreRepository implements TodoRepository {
@@ -41,7 +41,7 @@ export class TodoFirestoreRepository implements TodoRepository {
 
   }
 
-  public async getByUserAccess(ownerId: string, email: string): Promise<Todo[]> {
+  public async getByUserAccess(ownerId: string, email: string): Promise<TodoGetByUserAccessOutput[]> {
     try {
       const snapshotOwnerId = await this.collection
         .where('ownerId', '==', ownerId)
@@ -54,19 +54,27 @@ export class TodoFirestoreRepository implements TodoRepository {
 
       const todos: Todo[] = [];
       for (const doc of snapshotOwnerId.docs) {
-        const todo = await this.mapTodoPropsToEntity(doc.data() as TodoProps);
+        const todo = this.todoFirestoreMapper.toEntity(doc.data() as TodoProps);
         todos.push(todo);
       }
 
       for (const doc of snapshotEmail.docs) {
         const todoProps = doc.data() as TodoProps;
         if (!todos.some((t) => t.id === todoProps.id)) {
-          const todo = await this.mapTodoPropsToEntity(todoProps);
+          const todo = this.todoFirestoreMapper.toEntity(doc.data() as TodoProps);
           todos.push(todo);
         }
       }
 
-      return todos.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+      return todos
+        .map(todo => ({
+          title: todo.title,
+          ownerId: todo.ownerId,
+          sharedWith: todo.sharedWith,
+          createdAt: todo.createdAt,
+          updatedAt: todo.updatedAt
+        }))
+        .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
     } catch (error) {
       console.error('Error getting todos by owner id', error);
       throw error;
@@ -95,6 +103,9 @@ export class TodoFirestoreRepository implements TodoRepository {
       console.error('Error updating todo', error);
       throw error;
     }
+  }
+  public async deleteTodoItem(todo: Todo, todoItemId: string): Promise<void> {
+    await this.getSubCollection(todo.id).doc(todoItemId).delete();
   }
 
   public async getById(id: string): Promise<Todo | null> {
