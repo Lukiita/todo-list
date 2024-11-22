@@ -40,7 +40,7 @@ const userController = new UserController(
   loginUseCase
 );
 app.use("/users", (req, res, next) => {
-  if (req.path === "/login") {
+  if (req.path === "/login" || req.path === "/register") {
     return next();
   } else {
     authenticateMiddleware(tokenService)(req, res, next);
