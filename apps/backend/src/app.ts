@@ -20,7 +20,8 @@ import {
   router as userRoutes
 } from './user';
 
-const serviceAccount = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS || '{}');
+const serviceAccount = process.env.GOOGLE_APPLICATION_CREDENTIALS || JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON as string);
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
