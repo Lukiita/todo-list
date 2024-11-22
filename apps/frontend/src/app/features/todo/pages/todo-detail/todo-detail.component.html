@@ -16,21 +16,21 @@
       @if (todo) {
       <!-- Lista de Tasks -->
       <ul cdkDropList (cdkDropListDropped)="onDrop($event)" class="space-y-2">
-        @for (task of todo.items; track $index; let i = $index) {
+        @for (item of todo.items; track $index; let i = $index) {
         <li cdkDrag class="flex items-center bg-gray-100 p-3 rounded-lg shadow-sm border border-gray-300">
           <!-- Checkbox -->
-          <input type="checkbox" [(ngModel)]="task.isCompleted" class="mr-3 h-5 w-5 cursor-pointer"
-            (ngModelChange)="toggleTodoItemCompletion(task.id)" />
+          <input type="checkbox" [(ngModel)]="item.isCompleted" class="mr-3 h-5 w-5 cursor-pointer"
+            (ngModelChange)="toggleTodoItemCompletion(item.id)" />
 
           <div class="flex-1 mr-2">
-            @if (!task.isEditing) {
-            <span class="text-gray-800 cursor-pointer" [ngClass]="{ 'line-through text-gray-400': task.isCompleted }"
-              (dblclick)="startEditing(task)">
-              {{ task.content }}
+            @if (!item.isEditing) {
+            <span class="text-gray-800 cursor-pointer" [ngClass]="{ 'line-through text-gray-400': item.isCompleted }"
+              (dblclick)="startEditing(item)">
+              {{ item.content }}
             </span>
             } @else {
-            <input #editInput [(ngModel)]="task.content" class="w-full p-1 border rounded-md" (blur)="stopEditing(task)"
-              (keydown.enter)="stopEditing(task)" />
+            <input #editInput [(ngModel)]="updatedItemContent" class="w-full p-1 border rounded-md"
+              (blur)="onBlur(item)" (keydown.enter)="stopEditing(item)" />
             }
           </div>
 
@@ -50,9 +50,10 @@
       }
       <!-- Adicionar nova tarefa -->
       <div class="mt-4 flex items-center">
-        <input [(ngModel)]="newTaskName" placeholder="Adicione uma nova tarefa..."
-          class="flex-1 border border-gray-300 p-2 rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-500" />
-        <button (click)="addTodoItem()"
+        <input [(ngModel)]="newItemContent" placeholder="Adicione uma nova tarefa..."
+          class="flex-1 border border-gray-300 p-2 rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-500"
+          (keydown.enter)="addTodoItem()" />
+        <button (click)=" addTodoItem()"
           class="ml-3 bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600">
           Adicionar
         </button>

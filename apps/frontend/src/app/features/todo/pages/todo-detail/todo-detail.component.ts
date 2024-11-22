@@ -24,7 +24,8 @@ export class TodoDetailComponent implements OnInit, AfterViewChecked {
 
   public todo!: Todo;
   public showCreateTaskForm = false;
-  public newTaskName = '';
+  public newItemContent = '';
+  public updatedItemContent = '';
 
   constructor(
     private readonly loadingService: LoadingService,
@@ -62,27 +63,35 @@ export class TodoDetailComponent implements OnInit, AfterViewChecked {
   }
 
   public startEditing(item: TodoItem): void {
+    this.updatedItemContent = item.content;
     this.todo.items.forEach((t) => (t.isEditing = false));
     item.isEditing = true;
   }
 
-  stopEditing(item: TodoItem): void {
-    item.isEditing = false;
-
-    // Validação: não permitir que o campo fique vazio
-    if (!item.content.trim()) {
-      alert('O nome da tarefa não pode ser vazio!');
-      item.content = 'Nova tarefa'; // Valor padrão se vazio
+  public onBlur(item: TodoItem): void {
+    if (item.isEditing) {
+      this.stopEditing(item);
     }
+  }
+
+  public stopEditing(item: TodoItem): void {
+    item.isEditing = false;
+    this.updatedItemContent = this.updatedItemContent.trim();
+    if (!this.updatedItemContent || this.updatedItemContent === item.content) {
+      return;
+    }
+
+    item.content = this.updatedItemContent;
+    this.todoService.updateTodoItem(this.todo.id, item.id, this.updatedItemContent).subscribe();
   }
 
   public addTodoItem(): void {
     this.loadingService.present();
-    if (this.newTaskName.trim() && this.newTaskName.length >= 5) {
-      this.todoService.addTodoItem(this.todo.id, this.newTaskName)
+    if (this.newItemContent.trim() && this.newItemContent.length >= 5) {
+      this.todoService.addTodoItem(this.todo.id, this.newItemContent)
         .pipe(
           tap(todo => this.todo = todo),
-          tap(() => this.newTaskName = ''),
+          tap(() => this.newItemContent = ''),
           finalize(() => this.loadingService.dismiss()),
         )
         .subscribe();
